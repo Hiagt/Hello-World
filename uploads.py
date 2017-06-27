@@ -1,10 +1,14 @@
 # coding:utf-8
 import os
+import sys
 import os.path as op
-from flask import Flask, request, redirect, url_for, render_template, send_from_directory
+from flask import Flask, request, redirect, url_for, \
+    render_template, send_from_directory, flash
 from werkzeug.utils import secure_filename
-import multiprocessing
-import urllib
+
+reload(sys)
+sys.setdefaultencoding('utf-8')
+
 
 # 上传地址
 UPLOAD_FOLDER = 'F:\uploads\static\uploads'
@@ -12,6 +16,7 @@ UPLOAD_FOLDER = 'F:\uploads\static\uploads'
 ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])
 
 app = Flask(__name__)
+app.config['SECRET_KEY'] = '123'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['MAX_CONTENT_LENGTH'] = 30 * 1024 * 1024
 
@@ -58,8 +63,14 @@ def upload_file():
 
                 f.save(os.path.join(file_dir, filename))
 
-            return redirect(url_for('upload_file',
-                                    filename=filename))
+            # return redirect(url_for('upload_file',
+            #                         filename=filename))
+            flash("上传成功")
+            return render_template('upload.html')
+
+        else:
+            flash("仅支持txt, pdf, png, jpg, jpeg, gif格式文件上传")
+            return render_template('upload.html')
 
     return render_template('upload.html')
 
@@ -70,22 +81,22 @@ def manage_file():
     return render_template('manage.html', file_list=file_list)
 
 
-@app.route('/delete/<filename>')
-def delete_file(filename):
-    file_path = op.join(file_dir, filename)
-    os.remove(file_path)
-    return redirect(url_for('manage_file'))
-
-
 @app.route('/download/<filename>')
 def download_file(filename):
     return send_from_directory(file_dir, filename, as_attachment=True)
 
 
-@app.route('/search')
-def search_file():
-    file_list = os.listdir(file_dir)
-    return render_template('search.html', file_list=file_list)
+# @app.route('/delete/<filename>')
+# def delete_file(filename):
+#     file_path = op.join(file_dir, filename)
+#     os.remove(file_path)
+#     return redirect(url_for('manage_file'))
+
+
+# @app.route('/search')
+# def search_file():
+#     file_list = os.listdir(file_dir)
+#     return render_template('search.html', file_list=file_list)
 
 
 # @app.route('/search/download', methods=['GET', 'POST'])
