@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <form action="/search/download" method="post" enctype="multipart/form-data">
+        {% for file in file_list %}
+            <input type="checkbox" name="files" value="{{ file }}">
+            <a href="{{ url_for('download_file', filename=file) }}">{{ file }}</a>
+            <br>
+        {% endfor %}
+        <input type="submit" value="下载">
+    </form>
+
+
+</body>
+</html>
