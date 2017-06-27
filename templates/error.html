@@ -2,9 +2,15 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>$Title$</title>
+    <title>Title</title>
 </head>
 <body>
-$END$
+<a href="{{ url_for('upload_file') }}">Upload</a>
+<a href="{{ url_for('manage_file') }}">Manage</a>
+<script language="JavaScript">
+    alert("仅支持txt, pdf, png, jpg, jpeg, gif格式文件上传");
+</script>
+
+
 </body>
 </html>
