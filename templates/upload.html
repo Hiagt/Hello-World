@@ -6,9 +6,16 @@
 </head>
 <body>
     <h1>Upload</h1>
+<a href="{{ url_for('manage_file') }}">浏览文件</a>
+<a href="{{ url_for('create_folder') }}">新建文件夹</a>
     <form action="/upload" method="post" enctype=multipart/form-data>
-      <p><input type=file name=file multiple="multiple">
-         <input type=submit value=提交>
+        <select name="file_dir">
+            {% for file_dir in dir_list %}
+            <option value="{{ file_dir }}">{{ file_dir }}</option>
+            {% endfor %}
+        </select>
+      <p><input type="file" name="file" multiple="multiple">
+         <input type="submit" value="提交">
     </form>
     <h3>{{ get_flashed_messages()[0] }}</h3>
 

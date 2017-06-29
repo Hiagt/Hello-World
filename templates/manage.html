@@ -6,15 +6,28 @@
 </head>
 <body>
 <h1>File Manage</h1>
-<a href="{{ url_for('upload_file') }}">Upload</a>
-<a href="{{ url_for('manage_file') }}">Manage</a>
+<a href="{{ url_for('upload_file') }}">上传文件</a>
+<a href="{{ url_for('create_folder') }}">新建文件夹</a>
 <hr>
-
-{% for file in file_list %}
-    {{ file }}
-    <a href="{{ url_for('download_file', filename=file) }}">download</a>
-    <hr>
-{% endfor %}
-
+<tr>
+    <td>文件名</td>
+    <td>文件大小</td>
+<hr>
+    {% for file in file_list %}
+        <td>
+        <a href="{{ url_for('download_file', filename=file) }}">{{ file }}</a>
+        </td>
+        <td>
+        {{ size_dic[file] }}M
+        </td>
+        <hr>
+    {% endfor %}
+{#    {% for size in size_dic %}#}
+{#        <td>#}
+{#        {{ size }}M#}
+{#        </td>#}
+{#        <hr>#}
+{#    {% endfor %}#}
+</tr>
 </body>
 </html>
