@@ -118,16 +118,17 @@ def manage_file():
 def download_file(filename):
     # 判断是文件还是文件夹
     if allowed_file(filename):
-        # return send_from_directory(file_dir,
-        #                            filename,
-        #                            as_attachment=True)  # as_attachment=True不写即浏览文件
+        return send_from_directory(file_dir,
+                                   filename,
+                                   as_attachment=True)  # as_attachment=True不写即浏览文件
         # d_dir = op.join(down_dir, filename)
-        url = 'http://127.0.0.1:5000/download' + '/' + filename
+        # url = 'http://127.0.0.1:5000/download' + '/' + filename
 
-        r = request.get(url, verify=False)
-        print r.content
-        with open(down_dir, "wb") as code:
-            code.write(r.content)
+        # r = request.get(url, verify=False)
+
+        # print r.content
+        # with open(down_dir, "wb") as code:
+        #     code.write(r.content)
 
         # save_file(url, file_name=filename)
         # return redirect(url_for(manage_file))
