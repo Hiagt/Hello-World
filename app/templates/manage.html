@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h1>File Manage</h1>
+<a href="{{ url_for('main.upload_file') }}">上传文件</a>
+<hr>
+<tr>
+    <td>文件名</td>
+    <td>文件大小</td>
+<hr>
+    {% for file in file_list %}
+        <td>
+        <a href="{{ url_for('main.download_file', filename=file) }}">{{ file }}</a>
+        </td>
+        <td>
+        {{ size_dic[file] }}M
+        </td>
+        <hr>
+    {% endfor %}
+{#    {% for size in size_dic %}#}
+{#        <td>#}
+{#        {{ size }}M#}
+{#        </td>#}
+{#        <hr>#}
+{#    {% endfor %}#}
+</tr>
+    <h3>{{ get_flashed_messages()[0] }}</h3>
+</body>
+</html>
