@@ -10,7 +10,7 @@ class UserData(db.Model):
     filename = db.Column(db.String(120))
     category = db.Column(db.String(120))
 
-    def __init__(self, username, filename, category, time):
+    def __init__(self, username=None, filename=None, category=None, time=None):
         self.username = username
         self.filename = filename
         self.category = category
@@ -21,6 +21,14 @@ class UserData(db.Model):
 
     def __str__(self):
         return '<User %r>' % self.username
+
+    def to_json(self):
+        return dict(
+            username=self.username,
+            filename=self.filename,
+            time=self.time,
+            category=self.category
+        )
 
 
 class User(db.Model):

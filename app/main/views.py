@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-
 import os
 import os.path as op
 import sys
@@ -11,7 +10,7 @@ from flask import request, render_template, url_for,\
     send_from_directory, flash, current_app, redirect, session
 from ..models import UserData, User
 from app import db
-from config import config
+from .. import FILE_DIR
 
 # a = current_app.config['UPLOAD_FOLDER']
 
@@ -19,11 +18,7 @@ from config import config
 reload(sys)
 sys.setdefaultencoding('utf-8')
 
-file_dir = []
-# file_dir_ = r'C:\Users\admin\Desktop\learn\app\static\uploads'
-file_dir_ = config['development'].UPLOAD_FOLDER
-file_dir.append(file_dir_)
-print file_dir
+print FILE_DIR
 
 
 # 判断文件后缀
@@ -76,7 +71,7 @@ def down_data_db(filename):
 
 @main.route('/')
 def upload():
-    return render_template('uploads.html', dir_list=file_dir)
+    return render_template('uploads.html', dir_list=FILE_DIR)
 
 
 # 登陆
@@ -104,18 +99,18 @@ def login():
 
 
 # 文件上传
-@main.route('/uploads', methods=['GET', 'POST'])
+@main.route('/upload', methods=['GET', 'POST'])
 def upload_file():
     # 判断用户是否登陆
     if session.get('user'):
         if request.method == 'POST':
             f = request.files['file']
-            f_dir = request.form['file_dir']
+            f_dir = FILE_DIR[0]
             print f_dir
-
             if not f:
                 flash('请选择要上传的文件')
-                return render_template('uploads.html', dir_list=file_dir)
+                # return render_template('uploads.html', dir_list=FILE_DIR)
+                return redirect(url_for('main.upload'))
 
             # 判断上传文件是否符合规范
             if f and allowed_file(f.filename):
@@ -141,24 +136,16 @@ def upload_file():
 
                         # 记录进数据库
                         save_data_db(filename=filename)
-                        # user = session['user']
-                        # print user
-                        # sv_name = filename
-                        # category = 'uploads'
-                        #
-                        # new_log = UserData(
-                        #     username=user, filename=sv_name, category=category, time=now_time())
-                        #
-                        # db.session.add(new_log)
-                        # db.session.commit()
-                        # db.session.close()
 
                     f.save(op.join(f_dir, filename))
                     save_data_db(filename=filename)
 
+                    flash("上传成功")
+                    return render_template('uploads.html', dir_list=FILE_DIR)
+
                 flash("上传成功")
-                return render_template('uploads.html', dir_list=file_dir)
-        return render_template('uploads.html', dir_list=file_dir)
+                return render_template('uploads.html', dir_list=FILE_DIR)
+        return 'abc'
     else:
         flash('请登录')
         return render_template('login.html')
@@ -167,9 +154,9 @@ def upload_file():
 @main.route('/manage')
 def manage_file():
     size_dic = {}    # 储存文件大小
-    file_list = os.listdir(file_dir[0])
+    file_list = os.listdir(FILE_DIR[0])
     for f in file_list:
-        file_size = op.getsize(op.join(file_dir[0], f)) / 1024 / 1024.0
+        file_size = op.getsize(op.join(FILE_DIR[0], f)) / 1024 / 1024.0
         size_dic[f] = file_size
 
     # 根据文件名进行排序
@@ -194,12 +181,12 @@ def download_file(filename):
         # 判断是文件还是文件夹
         if allowed_file(filename):
             down_data_db(filename=filename)
-            return send_from_directory(file_dir[0],
+            return send_from_directory(FILE_DIR[0],
                                        filename,
                                        as_attachment=True)  # as_attachment=True不写即浏览文件
 
         else:
-            new_dir = file_dir[0] + '/' + filename     # 更改dir地址
+            new_dir = FILE_DIR[0] + '/' + filename     # 更改dir地址
             file_list = os.listdir(new_dir)
             size_dic = {}
             for f in file_list:

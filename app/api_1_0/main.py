@@ -12,6 +12,5 @@ def index():
 
     data = {
         'name': 'Hiagt',
-        'age': 23
     }
     return make_json_resp(data=data)
