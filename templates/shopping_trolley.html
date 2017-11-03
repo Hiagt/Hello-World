@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<form action="/" method="post">
+    <h1>购物车</h1>
+    <table>
+        <tr>
+            <th>商品名</th>
+            <th>数量</th>
+        </tr>
+        <dl>
+            <tr>
+                <td>{{name}}</td>
+                <td><input type="number" name="number" min="1"></td>
+                <td><input type="button" name="clean_button" value="删除"></td>
+            </tr>
+        </dl>
+    </table>
+    <input type="SUBMIT" name="buy" value="购买">
+</form>
+</body>
+</html>
