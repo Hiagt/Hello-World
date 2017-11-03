@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<form action="/login" method="post">
+    <p>账号:<input type="text" name="name" value="" placeholder="请输入账号"></p>
+    <p>密码:<input type="password" name="password" value="" placeholder="请输入密码"></p>
+
+    <input type="submit" value="登陆">
+    <a href="http://127.0.0.1:5000/signup"><input type="button" value="注册"></a>
+
+</form>
+<h3>{{ get_flashed_messages()[0] }}</h3>
+
+</body>
+</html>

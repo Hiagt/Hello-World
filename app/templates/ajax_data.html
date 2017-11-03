@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<script src="http://code.jquery.com/jquery-1.8.3.min.js"></script>
+<script src="http://code.jquery.com/jquery-1.8.3.js"></script>
+<body>
+{% extends 'admin/master.html' %}
+{% block body %}
+<div id="no-more-tables">
+    <table class="table table-striped table-bordered table-hover model-list cf">
+        <thead class="cf">
+            <tr>
+                <!--<th class="list-checkbox-column">-->
+                    <!--<input type="checkbox" name="rowtoggle" class="action-rowtoggle" title="选择所有记录">-->
+                <!--</th>-->
+                <!--<th class="span1">&nbsp;</th>-->
+                <th class="column-header col-username">
+                    <a href="/admin/userdata/?sort=0" title="按 Username 进行排序">Username</a>
+                </th>
+                <th class="column-header col-time">
+                    <a href="/admin/userdata/?sort=1" title="按 Time 进行排序">Time</a>
+                </th>
+                <th class="column-header col-filename">
+                    <a href="/admin/userdata/?sort=2" title="按 Filename 进行排序">Filename</a>
+                </th>
+                <th class="column-header col-category">
+                    <a href="/admin/userdata/?sort=3" title="按 Category 进行排序">Category</a>
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <!--<td>-->
+                    <!--<input type="checkbox" name="rowid" class="action-checkbox" value="2" title="选择记录">-->
+                <!--</td>-->
+                <!--<td class="list-buttons-column">-->
+                    <!--<a class="icon" href="/admin/userdata/edit/?url=%2Fadmin%2Fuserdata%2F&amp;id=2" title="编辑记录">-->
+                        <!--<span class="fa fa-pencil glyphicon icon-pencil"></span>-->
+                    <!--</a>-->
+                    <!--<form class="icon" method="POST" action="/admin/userdata/delete/">-->
+                        <!--<input id="id" name="id" type="hidden" value="2">-->
+                        <!--<input id="url" name="url" type="hidden" value="/admin/userdata/">-->
+                        <!--<button onclick="return confirm('你打算删除这条记录？');" title="Delete record">-->
+                            <!--<span class="fa fa-trash glyphicon icon-trash"></span>-->
+                        <!--</button>-->
+                    <!--</form>-->
+                <!--</td>-->
+                <td class="col-username" data-title="Username">
+                    adm1
+                </td>
+                <td class="col-time" data-title="Time">
+                    2017-07-08 12:43:09
+                </td>
+                <td class="col-filename" data-title="Filename">
+                    text1
+                </td>
+                <td class="col-category" data-title="Category">
+                    text1
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<div>
+    <a class="btn" href="javascript:;">点击</a>
+    <ul id="con"></ul>
+</div>
+<script type="text/javascript">
+    $(function () {
+        $('.btn').on('click',function () {
+            $.ajax({
+                url: "/admin/ajax/json/",
+                type: "POST",
+                dataType: "json",
+                async: true,
+                success: function (data){
+                    var dataObj = data,
+                    con = "";
+                    $.each(dataObj, function (index, item) {
+                        con += "<li>姓名："+item.username+"</li>";
+                        con += "<li>文件："+item.filename+"</li>";
+                        con += "<li>时间："+item.time+"</li>";
+                        con += "<li>类别："+item.category+"</li>";
+                    });
+                    console.log(con);
+                    $('#con').html(con);
+                }
+            })
+        })
+    })
+
+
+</script>
+{% endblock %}
+
+</body>
+</html>
