@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head><title>TestFrom</title></head>
+<body>
+<h1>Enter some data.</h1>
+<form method="post" action="/form/test">
+    <p>user name<br><input type="text" name="name"></p>
+    <p>food 1<br><input type="text" name="food1"></p>
+    <p>food 2<br><input type="text" name="food2"></p>
+    <p>food 3<br><input type="text" name="food3"></p>
+    <input type="submit">
+    {% raw xsrf_form_html() %}
+</form>
+</body>
+</html>

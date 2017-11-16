@@ -1,0 +1,58 @@
+import os.path
+import random
+
+import tornado.httpserver
+import tornado.ioloop
+import tornado.options
+import tornado.web
+
+from tornado.options import define, options
+
+define("port", default=18802, help="run on the given port", type=int)
+
+
+class IndexHandler(tornado.web.RequestHandler):
+    def get(self):
+        self.render('index.html')
+
+
+class MungedPageHandler(tornado.web.RequestHandler):
+    def map_by_first_letter(self, text):
+        mapped = dict()
+        for line in text.split('\r\n'):
+            for word in [x for x in line.split(' ') if len(x) > 0]:
+                if word[0] not in mapped: mapped[word[0]] = []
+                mapped[word[0]].append(word)
+        return mapped
+
+    def post(self):
+        source_text = self.get_argument('source')
+        text_to_change = self.get_argument('change')
+        source_map = self.map_by_first_letter(source_text)
+        change_lines = text_to_change.split('\r\n')
+        self.render('main.html', source_map=source_map, change_lines=change_lines, choice=random.choice)
+
+
+class Application(tornado.web.Application):
+    def __init__(self):
+        handlers = [
+            (r'/', IndexHandler),
+            (r'/poem', MungedPageHandler)
+        ]
+
+        settings = dict(
+            # cookie_secret="__TODO:_GENERATE_YOUR_OWN_RANDOM_VALUE_HERE__",
+            template_path=os.path.join(os.path.dirname(__file__), "templates"),
+            static_path=os.path.join(os.path.dirname(__file__), "static"),
+            # xsrf_cookies=True,  # 跨站请求伪造cookie,默认为True
+            debug=True
+        )
+
+        super(Application, self).__init__(handlers, **settings)
+
+
+if __name__ == '__main__':
+    tornado.options.parse_command_line()
+    app = Application()
+    app.listen(options.port)
+    tornado.ioloop.IOLoop.instance().start()
